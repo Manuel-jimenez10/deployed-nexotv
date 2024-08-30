@@ -21,7 +21,7 @@ export class StripeService {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.FRONTNEXO}/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.FRONTNEXO}/success`,
       cancel_url: `${process.env.FRONTNEXO}/cancel`,
     });
 

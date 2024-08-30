@@ -14,6 +14,7 @@ import { ContentModule } from './content/content.module';
 import { AuthModule } from './auth/auth.module';
 import { SeedModule } from './seed/seed.module';
 import { FilesModule } from './files/files.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -26,10 +27,7 @@ import { FilesModule } from './files/files.module';
       context: ({ req, res }) => ({ req, res }),
       cors: {
         origin: [
-          'http://localhost:3001',
-          'http://localhost:3000',
-          'https://nexo-tv.vercel.app',
-          'https://frontnexotv.vercel.app',
+          'http://localhost:3000'
         ],
         credentials: true,
       },
@@ -53,6 +51,7 @@ import { FilesModule } from './files/files.module';
     AuthModule,
     SeedModule,
     FilesModule,
+    StripeModule
   ],
   controllers: [],
   providers: [],
