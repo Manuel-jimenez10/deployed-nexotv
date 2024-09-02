@@ -6,7 +6,7 @@ type Subscription {
   id: ID!
   tipo: String!
   price: Float!
-  users: [User!]!
+  user: User!
 }
 
 type Support {
@@ -61,7 +61,7 @@ type User {
   views: [String!]
   roles: [String!]!
   isActive: Boolean!
-  subscription: Subscription!
+  subscription: Subscription
   viewingHistory: [ViewHistory!]!
   favorites: [Float!]
   support: [Support!]!
@@ -87,7 +87,6 @@ type Query {
   viewHistory(id: Int!): ViewHistory!
   supports: [Support!]!
   support(id: String!): Support!
-  subscription(id: Int!): Subscription!
   contentAll(paginationContentArgs: PaginationContentArgs!): [Content!]!
   contentOne(id: String!): Content!
   revalite: AuthResponse!
@@ -126,9 +125,6 @@ type Mutation {
   createSupport(createSupportInput: CreateSupportInput!): Support!
   updateSupport(id: String!, updateSupportInput: UpdateSupportInput!): Support!
   removeSupport(id: String!): Support!
-  createSubscription(createSubscriptionInput: CreateSubscriptionInput!): Subscription!
-  updateSubscription(updateSubscriptionInput: UpdateSubscriptionInput!): Subscription!
-  removeSubscription(id: Int!): Subscription!
   createContent(createContentInput: CreateContentInput!): Content!
   updateContent(updateContentInput: UpdateContentInput!): Content!
   removeContent(id: String!): Content!
@@ -137,7 +133,7 @@ type Mutation {
 
   """Ejecuta la construccion de la base de datos"""
   executeSeed: Boolean!
-  createCheckoutSession(priceId: String!): String!
+  createCheckoutSession(createCheckoutSessionDto: CreateCheckoutSessionDto!): String!
 }
 
 input CreateUserInput {
@@ -187,17 +183,6 @@ input UpdateSupportInput {
   descripcion_problema: String!
 }
 
-input CreateSubscriptionInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateSubscriptionInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
 input CreateContentInput {
   title: String!
   description: String!
@@ -230,4 +215,16 @@ input SignupInput {
 input LoginInput {
   email: String!
   password: String!
+}
+
+input CreateCheckoutSessionDto {
+  priceId: String!
+  price: Float!
+  tipo: Tipo!
+}
+
+enum Tipo {
+  Annual
+  Monthly
+  Free
 }

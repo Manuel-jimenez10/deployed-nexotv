@@ -13,23 +13,27 @@ import { PaginationArgs } from './dto/args/pagination.args';
 import * as bcrypt from 'bcrypt';
 import { SignupInput } from '../auth/dto/input/signup.input';
 import { ValidRoles } from 'src/auth/enums/valid-roles.emun';
+import { SubscriptionService } from 'src/subscription/subscription.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    private readonly subscriptionService: SubscriptionService
   ) {}
 
   private logger = new Logger('UsersServices');
 
   async create(signupInput: SignupInput): Promise<User> {
     const { password, ...restData } = signupInput;
-
+  
     try {
+      const defaultSubscription = await this.subscriptionService.defaultSubscription();
       const newUser = this.usersRepository.create({
         ...restData,
         password: bcrypt.hashSync(password, 10),
+        subscription: defaultSubscription,
       });
       return await this.usersRepository.save(newUser);
     } catch (error) {
@@ -37,6 +41,7 @@ export class UsersService {
       this.handleDbErros(error);
     }
   }
+  
 
   async findAll(
     paginationArgs: PaginationArgs,

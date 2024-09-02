@@ -5,8 +5,10 @@ import { ViewHistory } from 'src/view-history/entities/view-history.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -59,8 +61,11 @@ export class User {
   @Field(() => Boolean)
   isActive: boolean;
 
-  @Field(() => Subscription) // Decorador para la relación Many-to-One con Suscription
-  @ManyToOne(() => Subscription, (subscription) => subscription.users)
+  @Field(() => Subscription, { nullable: true }) // Decorador para GraphQL
+  @OneToOne(() => Subscription, (subscription) => subscription.user, {
+    cascade: true,
+  })
+  @JoinColumn()
   subscription: Subscription;
 
   @Field(() => [ViewHistory]) // Decorador para la relación One-to-Many con ViewingsHistory

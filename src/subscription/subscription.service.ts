@@ -1,26 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSubscriptionInput } from './dto/create-subscription.input';
-import { UpdateSubscriptionInput } from './dto/update-subscription.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Subscription, Tipo } from './entities/subscription.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class SubscriptionService {
-  create(createSubscriptionInput: CreateSubscriptionInput) {
-    return 'This action adds a new subscription';
-  }
+export class SubscriptionService{
+  constructor(
+    @InjectRepository(Subscription)
+    private readonly subscriptionRepository: Repository<Subscription>,
+  ) {}
 
-  findAll() {
-    return `This action returns all subscription`;
-  }
+  async defaultSubscription(): Promise<Subscription> {
+    // Buscar una suscripción predeterminada existente
+    let defaultSubscription = await this.subscriptionRepository.findOne({
+      where: { tipo: Tipo.Free },
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} subscription`;
-  }
+    // Si no existe, crear una nueva
+    if (!defaultSubscription) {
+      defaultSubscription = this.subscriptionRepository.create({
+        tipo: Tipo.Free,
+        price: 0,
+      });
+      await this.subscriptionRepository.save(defaultSubscription);
+    }
 
-  update(id: number, updateSubscriptionInput: UpdateSubscriptionInput) {
-    return `This action updates a #${id} subscription`;
+    return defaultSubscription;
   }
+ }
 
-  remove(id: number) {
-    return `This action removes a #${id} subscription`;
-  }
-}

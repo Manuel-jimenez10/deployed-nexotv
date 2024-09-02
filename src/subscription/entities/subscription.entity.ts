@@ -1,12 +1,16 @@
-import { ObjectType, Field, ID, Float } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Float, registerEnumType } from '@nestjs/graphql';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-enum Tipo {
-  Premium = 'premium',
-  Basic = 'basic',
-  Free = 'free',
+export enum Tipo {
+  Annual = 'Annual',
+  Monthly = 'Monthly',
+  Free = 'Free',
 }
+
+registerEnumType(Tipo, {
+  name: 'Tipo', // Nombre del enum en el esquema GraphQL
+});
 
 @ObjectType() // Decorador para convertir la clase en un tipo GraphQL
 @Entity({
@@ -37,9 +41,7 @@ export class Subscription {
   })
   price: number;
 
-  @Field(() => [User]) // Relación One-to-Many expuesta como campo GraphQL
-  @OneToMany(() => User, (user) => user.subscription, {
-    eager: true,
-  })
-  users: User[];
+  @Field(() => User) // Relación One-to-One expuesta como campo GraphQL
+  @OneToOne(() => User, (user) => user.subscription)
+  user: User;
 }

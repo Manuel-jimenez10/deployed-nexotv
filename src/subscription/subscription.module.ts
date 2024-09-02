@@ -7,5 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   providers: [SubscriptionResolver, SubscriptionService],
   imports: [TypeOrmModule.forFeature([Subscription])],
+  exports: [SubscriptionService]
 })
 export class SubscriptionModule {}
