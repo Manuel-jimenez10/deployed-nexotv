@@ -42,6 +42,6 @@ export class Subscription {
   price: number;
 
   @Field(() => User) // Relación One-to-One expuesta como campo GraphQL
-  @OneToOne(() => User, (user) => user.subscription)
+  @OneToMany(() => User, (user) => user.subscription)
   user: User;
 }

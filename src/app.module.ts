@@ -15,23 +15,19 @@ import { AuthModule } from './auth/auth.module';
 import { SeedModule } from './seed/seed.module';
 import { FilesModule } from './files/files.module';
 import { StripeModule } from './stripe/stripe.module';
+import { EmailModule } from './email/email.module';
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
+    EmailModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: false,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
-      context: ({ req, res }) => ({ req, res }),
-      cors: {
-        origin: [
-          'http://localhost:3000'
-        ],
-        credentials: true,
-      },
-    } as ApolloDriverConfig & { cors?: any }),
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -54,6 +50,6 @@ import { StripeModule } from './stripe/stripe.module';
     StripeModule
   ],
   controllers: [],
-  providers: [],
+  providers: [AuthService],
 })
 export class AppModule {}

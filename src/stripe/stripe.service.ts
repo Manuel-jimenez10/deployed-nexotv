@@ -31,7 +31,7 @@ export class StripeService {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.FRONTNEXO}/succes`,
+      success_url: `${process.env.FRONTNEXO}/success`,
       cancel_url: `${process.env.FRONTNEXO}/cancel`,
     });
 
