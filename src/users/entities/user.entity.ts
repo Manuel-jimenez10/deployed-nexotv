@@ -6,8 +6,8 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -61,9 +61,7 @@ export class User {
   isActive: boolean;
 
   @Field(() => Subscription, { nullable: true }) // Decorador para GraphQL
-  @ManyToOne(() => Subscription, (subscription) => subscription.user, {
-    cascade: true,
-  })
+  @OneToOne(() => Subscription, (subscription) => subscription.user)
   @JoinColumn()
   subscription: Subscription;
 

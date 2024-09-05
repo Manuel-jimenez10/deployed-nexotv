@@ -25,17 +25,21 @@ export class UsersService {
 
   private logger = new Logger('UsersServices');
 
-  async create(signupInput: SignupInput): Promise<User> {
+  async create( signupInput: SignupInput): Promise<User> {
     const { password, ...restData } = signupInput;
   
     try {
-      const defaultSubscription = await this.subscriptionService.defaultSubscription();
       const newUser = this.usersRepository.create({
         ...restData,
-        password: bcrypt.hashSync(password, 10),
-        subscription: defaultSubscription,
+        password: bcrypt.hashSync(password, 10)
       });
-      return await this.usersRepository.save(newUser);
+      
+      const user = await this.usersRepository.save(newUser);
+
+      await this.subscriptionService.defaultSubscription(user.id);
+
+      return user
+      
     } catch (error) {
       console.log(error);
       this.handleDbErros(error);

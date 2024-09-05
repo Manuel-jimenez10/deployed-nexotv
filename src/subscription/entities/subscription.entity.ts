@@ -1,6 +1,6 @@
 import { ObjectType, Field, ID, Float, registerEnumType } from '@nestjs/graphql';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum Tipo {
   Annual = 'Annual',
@@ -41,7 +41,8 @@ export class Subscription {
   })
   price: number;
 
-  @Field(() => User) // Relación One-to-One expuesta como campo GraphQL
-  @OneToMany(() => User, (user) => user.subscription)
+  @Field(() => User, {nullable: true})
+  @OneToOne(() => User, (user) => user.subscription)
   user: User;
+
 }

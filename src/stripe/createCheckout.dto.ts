@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber, IsPositive, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsPositive, IsEnum, IsOptional, IsUUID } from 'class-validator';
 import { Tipo } from 'src/subscription/entities/subscription.entity';
 import { ArgsType, Field, Float, InputType } from '@nestjs/graphql';
 
@@ -18,4 +18,9 @@ export class CreateCheckoutSessionDto {
   @Field(() => Tipo)
   @IsEnum(Tipo, { message: 'El campo tipo debe ser un valor válido de Tipo' })
   tipo: Tipo;
+
+  @Field()
+  @IsUUID()
+  @IsOptional()
+  userId?: string
 }

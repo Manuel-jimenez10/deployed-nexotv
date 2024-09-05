@@ -6,7 +6,7 @@ type Subscription {
   id: ID!
   tipo: String!
   price: Float!
-  user: User!
+  user: User
 }
 
 type Support {
@@ -82,6 +82,7 @@ type AuthResponse {
 type Query {
   users(paginationArgs: PaginationArgs!, validRolesArgs: ValidRolesArgs!): [User!]!
   user(id: String!): User!
+  defaultSubscription(id: String!): Subscription!
   metrics: [Metrics!]!
   metric(id: Int!): Metrics!
   viewHistory(id: Int!): ViewHistory!
@@ -116,6 +117,7 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): String!
+  updateSubscription(updateSubscriptionInput: UpdateSubscriptionInput!): Subscription!
   createMetric(createMetricInput: CreateMetricInput!): Metrics!
   updateMetric(updateMetricInput: UpdateMetricInput!): Metrics!
   removeMetric(id: Int!): Metrics!
@@ -149,6 +151,18 @@ input UpdateUserInput {
   firstName: String
   lastName: String
   id: String!
+}
+
+input UpdateSubscriptionInput {
+  tipo: Tipo
+  price: Int
+  id: String!
+}
+
+enum Tipo {
+  Annual
+  Monthly
+  Free
 }
 
 input CreateMetricInput {
@@ -221,10 +235,5 @@ input CreateCheckoutSessionDto {
   priceId: String!
   price: Float!
   tipo: Tipo!
-}
-
-enum Tipo {
-  Annual
-  Monthly
-  Free
+  userId: String!
 }
